@@ -10,17 +10,11 @@ def wallet_charge(event, context):
     wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
-    result = wallet_table.get_item(
-        Key={
-            'id': body['userId']
-        }
-    )
-    user_wallet = result['Item']
     charge_amount = body['chargeAmount']
 
     update_result = wallet_table.update_item(
         Key={
-            'id': user_wallet['id']
+            'id': body['userId']
         },
         UpdateExpression='SET amount = amount + :charge_amount',
         ExpressionAttributeValues={
@@ -32,7 +26,7 @@ def wallet_charge(event, context):
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
         Item={
-            'walletId': user_wallet['id'],
+            'walletId': body['userId'],
             'transactionId': body['transactionId'],
             'chargeAmount': body['chargeAmount'],
             'locationId': body['locationId'],
