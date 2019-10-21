@@ -38,7 +38,6 @@ def wallet_use(event, context):
         },
         ReturnValues="ALL_NEW",
     )
-    print(update_result) # FIXME
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
