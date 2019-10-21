@@ -54,7 +54,7 @@ def wallet_use(event, context):
         'transactionId': body['transactionId'],
         'userId': body['userId'],
         'useAmount': body['useAmount'],
-        'totalAmount': int(update_result['Attributes']['amount']['N'])
+        'totalAmount': int(update_result['Attributes']['amount'])
     })
 
     return {
