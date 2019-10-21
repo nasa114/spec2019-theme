@@ -12,6 +12,17 @@ def wallet_charge(event, context):
     body = json.loads(event['body'])
     charge_amount = body['chargeAmount']
 
+    # DELETEME ===>
+    result = wallet_table.get_item(
+        ConsistentRead=True,
+        Key={
+                'id': body['userId']
+        }
+    )
+    print(f'before: {json.dumps(result)}')  # DEBUG
+    # <=== DELETEME
+
+    body = json.loads(event['body'])
     print(json.dumps(body))  # DEBUG
 
     update_result = wallet_table.update_item(

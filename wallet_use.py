@@ -20,6 +20,7 @@ def wallet_use(event, context):
     expected_total_amount = user_wallet['amount'] - body['useAmount']
     use_amount = body['useAmount']
 
+    print(f'before: {json.dumps(user_wallet)}')  # DEBUG
     print(f'body: {json.dumps(body)}')  # DEBUG
 
     if expected_total_amount < 0:
