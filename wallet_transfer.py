@@ -53,8 +53,8 @@ def wallet_transfer(event, context):
         ReturnValues="ALL_NEW",
     )
 
-    print(f'from_update_result: {json.dumps(from_update_result)}')  # DEBUG
-    print(f'to_update_result: {json.dumps(to_update_result)}')  # DEBUG
+    print(f'from_update_result: {from_update_result}')  # DEBUG
+    print(f'to_update_result: {to_update_result)}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(

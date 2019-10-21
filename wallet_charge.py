@@ -25,7 +25,7 @@ def wallet_charge(event, context):
         ReturnValues="ALL_NEW",
     )
 
-    print(f'update_result: {json.dumps(update_result)}')  # DEBUG
+    print(f'update_result: {update_result}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
