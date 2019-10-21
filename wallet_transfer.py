@@ -28,7 +28,7 @@ def wallet_transfer(event, context):
             'id': body['toUserId']
         }
     )
-    print(f'after before: {to_res}')  # DEBUG
+    print(f'to before: {to_res}')  # DEBUG
     print(f'body: {json.dumps(body)}')  # DEBUG
 
     if from_total_amount < 0:
