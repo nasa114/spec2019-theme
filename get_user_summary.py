@@ -47,7 +47,7 @@ def get_user_summary(event, context):
         'statusCode': 200,
         'body': json.dumps({
             'userName': user['Item']['name'],
-            'currentAmount': int(wallet['Item']['amount']),
+            'currentAmount': int(wallet['']['amount']),
             'totalChargeAmount': int(sum_charge),
             'totalUseAmount': int(sum_payment),
             'timesPerLocation': times_per_location

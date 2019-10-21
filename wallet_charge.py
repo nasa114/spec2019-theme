@@ -12,6 +12,8 @@ def wallet_charge(event, context):
     body = json.loads(event['body'])
     charge_amount = body['chargeAmount']
 
+    import json; print(json.dumps(body))  # DEBUG
+
     update_result = wallet_table.update_item(
         Key={
             'id': body['userId']
@@ -22,6 +24,8 @@ def wallet_charge(event, context):
         },
         ReturnValues="ALL_NEW",
     )
+
+    import json; print(f'update_result: {json.dumps(update_result)}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(

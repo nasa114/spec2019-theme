@@ -20,6 +20,8 @@ def wallet_use(event, context):
     expected_total_amount = user_wallet['amount'] - body['useAmount']
     use_amount = body['useAmount']
 
+    import json; print(f'body: {json.dumps(body)}')  # DEBUG
+
     if expected_total_amount < 0:
         return {
             'statusCode': 400,
@@ -38,6 +40,8 @@ def wallet_use(event, context):
         },
         ReturnValues="ALL_NEW",
     )
+
+    import json; print(f'update_result: {json.dumps(update_result)}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(

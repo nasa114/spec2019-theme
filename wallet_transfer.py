@@ -21,6 +21,8 @@ def wallet_transfer(event, context):
     from_total_amount = from_wallet['amount'] - body['transferAmount']
     transfer_amount = body['transferAmount']
 
+    import json; print(f'body: {json.dumps(body)}')  # DEBUG
+
     if from_total_amount < 0:
         return {
             'statusCode': 400,
@@ -50,6 +52,9 @@ def wallet_transfer(event, context):
         },
         ReturnValues="ALL_NEW",
     )
+
+    import json; print(f'from_update_result: {json.dumps(from_update_result)}')  # DEBUG
+    import json; print(f'to_update_result: {json.dumps(to_update_result)}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
