@@ -19,7 +19,7 @@ def wallet_charge(event, context):
                 'id': body['userId']
         }
     )
-    print(f'before: {json.dumps(result)}')  # DEBUG
+    print(f'before: {result}')  # DEBUG
     # <=== DELETEME
 
     body = json.loads(event['body'])
