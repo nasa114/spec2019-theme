@@ -1,0 +1,18 @@
+- 1枚のLambdaにすべての関数 -> 1 Lambda 1関数に
+    - デプロイパフォーマンス改善
+    - AWS標準のメトリクスとかを関数単位で取れそう
+        - 呼び出し回数と処理時間
+- POSTの内容を覗きたい
+    - logger仕込むか
+- wallet_useにTypo
+- とりあえずDBのScanはやめよう
+- wallet_use
+    - 1ユーザ1ウォレットならuserIdで引ければ良さそう
+    - 202
+- wallet_transfer
+    - 結構外部(DynamnoDB/requests.post)叩いてるところ多い
+- wallet_xxxは202返してる -> 非同期化の釣り針か?
+- 非同期化(asyncio)
+    - 104以下など
+- 異常系すくなくない?
+    - ちゃんとやることで加点されないかな
