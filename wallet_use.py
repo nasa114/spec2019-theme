@@ -17,24 +17,28 @@ def wallet_use(event, context):
         }
     )
     user_wallet = result['Item']
-    total_amount = user_wallet['amount'] - body['useAmount']
-    if total_amount < 0:
+    expected_total_amount = user_wallet['amount'] - body['useAmount']
+    use_amount = body['useAmount']
+
+    if expected_total_amount < 0:
         return {
             'statusCode': 400,
             'body': json.dumps({'errorMessage': 'There was not enough money.'})
         }
 
+    # 数値の更新はUpdateExpressionする
     wallet_table.update_item(
         Key={
             'id': user_wallet['id']
         },
-        AttributeUpdates={
-            'amount': {
-                'Value': total_amount,
-                'Action': 'PUT'
-            }
+        # "In general, we recommend using SET rather than ADD" in the doc
+        UpdateExpression='SET total_amount = total_amount - use_amount',
+        ExpressionAttributeValues={
+            'use_amount': use_amount
         }
     )
+
+    # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
         Item={
             'walletId': user_wallet['id'],
