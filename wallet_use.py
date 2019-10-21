@@ -13,7 +13,7 @@ def wallet_use(event, context):
     result = wallet_table.get_item(
         ConsistentRead=True,
         Key={
-                'walletId': body['userId']
+                'id': body['userId']
         }
     )
     user_wallet = result['Items']
