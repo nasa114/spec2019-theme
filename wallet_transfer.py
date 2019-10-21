@@ -17,16 +17,8 @@ def wallet_transfer(event, context):
         }
     )
     from_wallet = from_res['Item']
-    to_res = wallet_table.get_item(
-        ConsistentRead=True,
-        Key={
-            'id': body['toUserId']
-        }
-    )
-    to_wallet = to_res['Item']
 
     from_total_amount = from_wallet['amount'] - body['transferAmount']
-    to_total_amount = from_wallet['amount'] + body['transferAmount']
     transfer_amount = body['transferAmount']
 
     if from_total_amount < 0:
@@ -38,7 +30,7 @@ def wallet_transfer(event, context):
     # TODO
     from_update_result = wallet_table.update_item(
         Key={
-            'id': from_wallet['id']
+            'id': body['fromUserId']
         },
         UpdateExpression='SET amount = amount - :transfer_amount',
         ExpressionAttributeValues={
@@ -50,7 +42,7 @@ def wallet_transfer(event, context):
     # TODO
     to_update_result = wallet_table.update_item(
         Key={
-            'id': to_wallet['id']
+            'id': body['toUserId']
         },
         UpdateExpression='SET amount = amount + :transfer_amount',
         ExpressionAttributeValues={
