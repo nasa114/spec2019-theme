@@ -13,16 +13,16 @@ def wallet_transfer(event, context):
     from_res = wallet_table.get_item(
         ConsistentRead=True,
         Key={
-            'userId': body['fromUserId']
+            'id': body['fromUserId']
         }
-    ).get('Items')
+    )
     from_wallet = from_res['Item']
     to_res = wallet_table.get_item(
         ConsistentRead=True,
         Key={
-            'userId': body['toUserId']
+            'id': body['toUserId']
         }
-    ).get('Items')
+    )
     to_wallet = to_res['Item']
 
     from_total_amount = from_wallet['amount'] - body['transferAmount']
