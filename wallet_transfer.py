@@ -27,34 +27,39 @@ def wallet_transfer(event, context):
 
     from_total_amount = from_wallet['amount'] - body['transferAmount']
     to_total_amount = from_wallet['amount'] + body['transferAmount']
+    transfer_amount = body['transferAmount']
+
     if from_total_amount < 0:
         return {
             'statusCode': 400,
             'body': json.dumps({'errorMessage': 'There was not enough money.'})
         }
 
-    wallet_table.update_item(
+    # TODO
+    from_update_result = wallet_table.update_item(
         Key={
             'id': from_wallet['id']
         },
-        AttributeUpdates={
-            'amount': {
-                'Value': from_total_amount,
-                'Action': 'PUT'
-            }
-        }
+        UpdateExpression='SET amount = amount - :transfer_amount',
+        ExpressionAttributeValues={
+            ':transfer_amount': transfer_amount
+        },
+        ReturnValues="ALL_NEW",
     )
-    wallet_table.update_item(
+
+    # TODO
+    to_update_result = wallet_table.update_item(
         Key={
             'id': to_wallet['id']
         },
-        AttributeUpdates={
-            'amount': {
-                'Value': to_total_amount,
-                'Action': 'PUT'
-            }
-        }
+        UpdateExpression='SET amount = amount + :transfer_amount',
+        ExpressionAttributeValues={
+            ':transfer_amount': transfer_amount
+        },
+        ReturnValues="ALL_NEW",
     )
+
+    # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
         Item={
             'walletId': from_wallet['id'],
@@ -73,18 +78,20 @@ def wallet_transfer(event, context):
             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
     )
+
+    # 正しい値を入れる
     requests.post(os.environ['NOTIFICATION_ENDPOINT'], json={
         'transactionId': body['transactionId'],
         'userId': body['fromUserId'],
         'useAmount': body['transferAmount'],
-        'totalAmount': int(from_total_amount),
+        'totalAmount': int(from_update_result['Attributes']['amount']),
         'transferTo': body['toUserId']
     })
     requests.post(os.environ['NOTIFICATION_ENDPOINT'], json={
         'transactionId': body['transactionId'],
         'userId': body['toUserId'],
         'chargeAmount': body['transferAmount'],
-        'totalAmount': int(to_total_amount),
+        'totalAmount': int(to_update_result['Attributes']['amount']),
         'transferFrom': body['fromUserId']
     })
 
