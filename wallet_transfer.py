@@ -54,7 +54,7 @@ def wallet_transfer(event, context):
     )
 
     print(f'from_update_result: {from_update_result}')  # DEBUG
-    print(f'to_update_result: {to_update_result)}')  # DEBUG
+    print(f'to_update_result: {to_update_result}')  # DEBUG
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
