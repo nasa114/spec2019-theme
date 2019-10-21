@@ -22,6 +22,7 @@ def wallet_transfer(event, context):
         }
     ).get('Items').pop()
     to_wallet = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [

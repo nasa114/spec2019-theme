@@ -22,6 +22,7 @@ def get_payment_history(event, context):
         }
     ).get('Items').pop()
     payment_history_result = history_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'walletId': {
                 'AttributeValueList': [
