@@ -34,7 +34,7 @@ def wallet_use(event, context):
         # "In general, we recommend using SET rather than ADD" in the doc
         UpdateExpression='SET amount = amount - :use_amount',
         ExpressionAttributeValues={
-            ':use_amount': {'N': use_amount}
+            ':use_amount': use_amount
         },
         ReturnValues="ALL_NEW",
     )
