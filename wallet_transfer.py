@@ -21,6 +21,14 @@ def wallet_transfer(event, context):
     from_total_amount = from_wallet['amount'] - body['transferAmount']
     transfer_amount = body['transferAmount']
 
+    print(f'from before: {from_res}')  # DEBUG
+    to_res = wallet_table.get_item(
+        ConsistentRead=True,
+        Key={
+            'id': body['toUserId']
+        }
+    )
+    print(f'after before: {to_res}')  # DEBUG
     print(f'body: {json.dumps(body)}')  # DEBUG
 
     if from_total_amount < 0:
