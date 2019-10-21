@@ -10,26 +10,16 @@ def wallet_transfer(event, context):
     wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
-    from_wallet = wallet_table.scan(
+    from_wallet = wallet_table.get_item(
         ConsistentRead=True,
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    body['fromUserId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
+        Key={
+            'userId': body['fromUserId']
         }
     ).get('Items').pop()
-    to_wallet = wallet_table.scan(
+    to_wallet = wallet_table.get_item(
         ConsistentRead=True,
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    body['toUserId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
+        Key={
+            'userId': body['toUserId']
         }
     ).get('Items').pop()
 
