@@ -11,6 +11,7 @@ def wallet_charge(event, context):
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
     result = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [

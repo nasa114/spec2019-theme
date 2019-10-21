@@ -11,6 +11,7 @@ def wallet_transfer(event, context):
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
     from_wallet = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [
@@ -21,6 +22,7 @@ def wallet_transfer(event, context):
         }
     ).get('Items').pop()
     to_wallet = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [

@@ -1,6 +1,5 @@
 import json
 import os
-import uuid
 
 import boto3
 
@@ -17,7 +16,7 @@ def user_create(event, context):
     )
     wallet_table.put_item(
         Item={
-            'id': str(uuid.uuid4()),
+            'id': body['id'],
             'userId': body['id'],
             'amount': 0
         }
