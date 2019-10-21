@@ -11,25 +11,21 @@ def get_user_summary(event, context):
     user_table = boto3.resource('dynamodb').Table(os.environ['USER_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     params = event['pathParameters']
+
     user = user_table.get_item(
         Key={'id': params['userId']}
     )
-    wallet = wallet_table.scan(
+
+    wallet = wallet_table.get_item(
         ConsistentRead=True,
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    params['userId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
-        }
-    ).get('Items').pop()
+        Key={'id': params['userId']}
+    )
+
     payment_history = history_table.scan(
         ScanFilter={
             'walletId': {
                 'AttributeValueList': [
-                    wallet['id']
+                    params['userId']
                 ],
                 'ComparisonOperator': 'EQ'
             }
@@ -51,7 +47,7 @@ def get_user_summary(event, context):
         'statusCode': 200,
         'body': json.dumps({
             'userName': user['Item']['name'],
-            'currentAmount': int(wallet['amount']),
+            'currentAmount': int(wallet['Item']['amount']),
             'totalChargeAmount': int(sum_charge),
             'totalUseAmount': int(sum_payment),
             'timesPerLocation': times_per_location
