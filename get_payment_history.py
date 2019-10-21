@@ -7,26 +7,14 @@ from util import get_location_name
 
 
 def get_payment_history(event, context):
-    wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     params = event['pathParameters']
-    wallet = wallet_table.scan(
-        ConsistentRead=True,
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    params['userId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
-        }
-    ).get('Items').pop()
     payment_history_result = history_table.scan(
         ConsistentRead=True,
         ScanFilter={
             'walletId': {
                 'AttributeValueList': [
-                    wallet['id']
+                    params['userId']
                 ],
                 'ComparisonOperator': 'EQ'
             }
