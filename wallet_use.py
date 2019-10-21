@@ -10,18 +10,13 @@ def wallet_use(event, context):
     wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
-    result = wallet_table.scan(
+    result = wallet_table.get_item(
         ConsistentRead=True,
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    body['userId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
+        Key={
+                'walletId': body['userId']
         }
     )
-    user_wallet = result['Items'].pop()
+    user_wallet = result['Items']
     total_amount = user_wallet['amount'] - body['useAmount']
     if total_amount < 0:
         return {
