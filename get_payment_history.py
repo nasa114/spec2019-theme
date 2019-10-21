@@ -11,6 +11,7 @@ def get_payment_history(event, context):
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     params = event['pathParameters']
     wallet = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [

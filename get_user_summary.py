@@ -15,6 +15,7 @@ def get_user_summary(event, context):
         Key={'id': params['userId']}
     )
     wallet = wallet_table.scan(
+        ConsistentRead=True,
         ScanFilter={
             'userId': {
                 'AttributeValueList': [
