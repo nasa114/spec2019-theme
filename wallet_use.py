@@ -36,7 +36,7 @@ def wallet_use(event, context):
         ExpressionAttributeValues={
             ':use_amount': {'N': use_amount}
         },
-        ReturnValue="ALL_NEW",
+        ReturnValues="ALL_NEW",
     )
     print(update_result) # FIXME
 
