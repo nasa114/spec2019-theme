@@ -10,17 +10,12 @@ def wallet_charge(event, context):
     wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
-    result = wallet_table.scan(
-        ScanFilter={
-            'userId': {
-                'AttributeValueList': [
-                    body['userId']
-                ],
-                'ComparisonOperator': 'EQ'
-            }
+    result = wallet_table.get_item(
+        Key = {
+            'id': body['userId']
         }
     )
-    user_wallet = result['Items'].pop()
+    user_wallet = result['Item']
     total_amount = user_wallet['amount'] + body['chargeAmount']
     wallet_table.update_item(
         Key={
