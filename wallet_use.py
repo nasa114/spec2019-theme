@@ -16,7 +16,7 @@ def wallet_use(event, context):
                 'id': body['userId']
         }
     )
-    user_wallet = result['Items']
+    user_wallet = result['Item']
     total_amount = user_wallet['amount'] - body['useAmount']
     if total_amount < 0:
         return {
