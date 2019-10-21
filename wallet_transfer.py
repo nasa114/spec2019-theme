@@ -10,18 +10,20 @@ def wallet_transfer(event, context):
     wallet_table = boto3.resource('dynamodb').Table(os.environ['WALLET_TABLE'])
     history_table = boto3.resource('dynamodb').Table(os.environ['PAYMENT_HISTORY_TABLE'])
     body = json.loads(event['body'])
-    from_wallet = wallet_table.get_item(
+    from_res = wallet_table.get_item(
         ConsistentRead=True,
         Key={
             'userId': body['fromUserId']
         }
-    ).get('Items').pop()
-    to_wallet = wallet_table.get_item(
+    ).get('Items')
+    from_wallet = from_res['Item']
+    to_res = wallet_table.get_item(
         ConsistentRead=True,
         Key={
             'userId': body['toUserId']
         }
-    ).get('Items').pop()
+    ).get('Items')
+    to_wallet = to_res['Item']
 
     from_total_amount = from_wallet['amount'] - body['transferAmount']
     to_total_amount = from_wallet['amount'] + body['transferAmount']
