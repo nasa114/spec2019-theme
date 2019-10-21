@@ -34,7 +34,7 @@ def wallet_use(event, context):
         # "In general, we recommend using SET rather than ADD" in the doc
         UpdateExpression='SET total_amount = total_amount - :use_amount',
         ExpressionAttributeValues={
-            ':use_amount': {'N': use_amount}
+            ':use_amount': use_amount,
         }
     )
 
@@ -52,7 +52,7 @@ def wallet_use(event, context):
         'transactionId': body['transactionId'],
         'userId': body['userId'],
         'useAmount': body['useAmount'],
-        'totalAmount': int(total_amount)
+        'totalAmount': int(total_amount) #FIXME
     })
 
     return {
