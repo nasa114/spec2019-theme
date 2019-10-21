@@ -22,7 +22,7 @@ def wallet_charge(event, context):
         Key={
             'id': user_wallet['id']
         },
-        UpdateExpression='SET amount = amount - :charge_amount',
+        UpdateExpression='SET amount = amount + :charge_amount',
         ExpressionAttributeValues={
             ':charge_amount': charge_amount
         },
