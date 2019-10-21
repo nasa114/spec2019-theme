@@ -23,37 +23,37 @@ provider:
 
 functions:
   CreateUser:
-    handler: handler.user_create
+    handler: user_create.user_create
     events:
       - http:
           path: users
           method: post
   WalletCharge:
-    handler: handler.wallet_charge
+    handler: wallet_charge.wallet_charge
     events:
       - http:
           path: wallet/charge
           method: post
   WalletUse:
-    handler: handler.wallet_use
+    handler: wallet_use.wallet_use
     events:
       - http:
           path: wallet/use
           method: post
   WalletTransfer:
-    handler: handler.wallet_transfer
+    handler: wallet_transfer.wallet_transfer
     events:
       - http:
           path: wallet/transfer
           method: post
   GetUserSummary:
-    handler: handler.get_user_summary
+    handler: get_user_summary.get_user_summary
     events:
       - http:
           path: users/{userId}/summary
           method: get
   GetPaymentHistory:
-    handler: handler.get_payment_history
+    handler: get_payment_history.get_payment_history
     events:
       - http:
           path: users/{userId}/history
