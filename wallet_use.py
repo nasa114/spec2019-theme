@@ -27,16 +27,18 @@ def wallet_use(event, context):
         }
 
     # 数値の更新はUpdateExpressionする
-    wallet_table.update_item(
+    update_result = wallet_table.update_item(
         Key={
             'id': user_wallet['id']
         },
         # "In general, we recommend using SET rather than ADD" in the doc
-        UpdateExpression='SET total_amount = total_amount - :use_amount',
+        UpdateExpression='SET amount = amount - :use_amount',
         ExpressionAttributeValues={
-            ':use_amount': use_amount,
-        }
+            ':use_amount': {'N': use_amount}
+        },
+        ReturnValue="ALL_NEW",
     )
+    print(update_result) # FIXME
 
     # ここは数値を加算しないのでUpdateExpressionは要らなそう
     history_table.put_item(
@@ -52,7 +54,7 @@ def wallet_use(event, context):
         'transactionId': body['transactionId'],
         'userId': body['userId'],
         'useAmount': body['useAmount'],
-        'totalAmount': int(total_amount) #FIXME
+        'totalAmount': int(update_result['Attributes']['amount']['N'])
     })
 
     return {
